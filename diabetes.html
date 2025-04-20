@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Оценка риска развития сахарного диабета 2 типа</title>
+<style>
+        :root {
+            --apple-blue: #0071e3;
+            --apple-gray: #f5f5f7;
+            --apple-dark: #1d1d1f;
+            --apple-light: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: var(--apple-gray);
+            color: var(--apple-dark);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(to bottom, var(--apple-blue), #004f9a);
+            color: white;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: var(--apple-blue);
+        }
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        .survey-form {
+            background-color: var(--apple-light);
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        
+        .question:last-child {
+            border-bottom: none;
+        }
+        
+        .question-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: var(--apple-dark);
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: var(--apple-gray);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        
+        .option:hover {
+            background-color: #e8e8ed;
+        }
+        
+        .option.selected {
+            background-color: rgba(0, 113, 227, 0.1);
+            border: 1px solid var(--apple-blue);
+        }
+        
+        .option input {
+            margin-right: 12px;
+            accent-color: var(--apple-blue);
+            transform: scale(1.2);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--apple-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .btn:hover {
+            background-color: #0066cc;
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .result-container {
+            display: none;
+            background-color: var(--apple-light);
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .result-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .score {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--apple-blue);
+        }
+        
+        .risk-level {
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.3rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .low {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+        
+        .medium {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+        
+        .high {
+            background-color: rgba(253, 126, 20, 0.2);
+            color: #fd7e14;
+        }
+        
+        .very-high {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        .recommendation {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--apple-gray);
+            border-radius: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .bmi-calculator {
+            background-color: var(--apple-gray);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .bmi-calculator.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .bmi-result {
+            font-weight: 600;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .bmi-result.show {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Анимация для вопросов с задержкой */
+        .question:nth-child(1) { animation-delay: 0.1s; }
+        .question:nth-child(2) { animation-delay: 0.2s; }
+        .question:nth-child(3) { animation-delay: 0.3s; }
+        .question:nth-child(4) { animation-delay: 0.4s; }
+        .question:nth-child(5) { animation-delay: 0.5s; }
+        .question:nth-child(6) { animation-delay: 0.6s; }
+        .question:nth-child(7) { animation-delay: 0.7s; }
+        .question:nth-child(8) { animation-delay: 0.8s; }
+    </style>
+</head>
+<body>
+<header>
+<h1>Оценка риска развития</h1>
+<p>сахарного диабета 2 типа</p>
+<div style="text-align:center; margin-top: 24px;">
+<a href="index.html" onmouseout="this.style.backgroundColor='#f9f9f9'" onmouseover="this.style.backgroundColor='#f0f0f0'" style="
+    display: inline-block;
+    padding: 10px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1c1c1e;
+    background: #f9f9f9;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    text-decoration: none;
+    transition: all 0.25s ease;
+  ">
+    ← Вернуться к выбору анкет
+  </a>
+</div>
+
+</header>
+<div class="container">
+<div class="intro">
+<h2>Опросник для самодиагностики</h2>
+<p>Ответьте на вопросы и подсчитайте свои баллы. Это поможет понять, стоит ли обратить повышенное внимание на здоровье и обсудить риски с врачом.</p>
+</div>
+<form class="survey-form" id="surveyForm">
+<div class="question">
+<div class="question-title">1. Ваш возраст:</div>
+<div class="options">
+<label class="option">
+<input name="age" required="" type="radio" value="0"/> до 45 лет — 0 баллов
+                    </label>
+<label class="option">
+<input name="age" type="radio" value="2"/> от 45 до 54 лет — 2 балла
+                    </label>
+<label class="option">
+<input name="age" type="radio" value="3"/> от 55 до 64 лет — 3 балла
+                    </label>
+<label class="option">
+<input name="age" type="radio" value="4"/> 65 лет и старше — 4 балла
+                    </label>
+</div>
+</div>
+<div class="question">
+<div class="question-title">2. Индекс массы тела (ИМТ):</div>
+<div class="options">
+<label class="option">
+<input name="bmi" required="" type="radio" value="0"/> менее 25 кг/м² — 0 баллов
+                    </label>
+<label class="option">
+<input name="bmi" type="radio" value="1"/> 25–30 кг/м² — 1 балл
+                    </label>
+<label class="option">
+<input name="bmi" type="radio" value="3"/> более 30 кг/м² — 3 балла
+                    </label>
+<button class="btn" id="calculateBmiBtn" style="margin-top: 10px; background-color: #34a853;" type="button">Рассчитать ИМТ</button>
+</div>
+<div class="bmi-calculator" id="bmiCalculator">
+<div class="input-group">
+<label for="height">Рост (см):</label>
+<input id="height" placeholder="Например, 175" type="number"/>
+</div>
+<div class="input-group">
+<label for="weight">Вес (кг):</label>
+<input id="weight" placeholder="Например, 70" type="number"/>
+</div>
+<button class="btn" id="calculateBtn" style="background-color: #34a853;" type="button">Рассчитать</button>
+<div class="bmi-result" id="bmiResult"></div>
+</div>
+</div>
+<div class="question">
+<div class="question-title">3. Объем талии:</div>
+<div class="options">
+<label class="option">
+<input name="waist" required="" type="radio" value="0"/> Мужчины: менее 94 см / Женщины: менее 80 см — 0 баллов
+                    </label>
+<label class="option">
+<input name="waist" type="radio" value="3"/> Мужчины: 94–102 см / Женщины: 80–88 см — 3 балла
+                    </label>
+<label class="option">
+<input name="waist" type="radio" value="4"/> Мужчины: более 102 см / Женщины: более 88 см — 4 балла
+                    </label>
+</div>
+</div>
+<div class="question">
+<div class="question-title">4. Занимаетесь ли вы физической активностью не менее 30 минут в день?</div>
+<div class="options">
+<label class="option">
+<input name="activity" required="" type="radio" value="0"/> Да — 0 баллов
+                    </label>
+<label class="option">
+<input name="activity" type="radio" value="2"/> Нет — 2 балла
+                    </label>
+</div>
+</div>
+<div class="question">
+<div class="question-title">5. Как часто вы едите овощи, фрукты, ягоды?</div>
+<div class="options">
+<label class="option">
+<input name="vegetables" required="" type="radio" value="0"/> Каждый день — 0 баллов
+                    </label>
+<label class="option">
+<input name="vegetables" type="radio" value="1"/> Реже — 1 балл
+                    </label>
+</div>
+</div>
+<div class="question">
+<div class="question-title">6. Принимали ли вы когда-либо лекарства от повышенного давления?</div>
+<div class="options">
+<label class="option">
+<input name="pressure" required="" type="radio" value="0"/> Нет — 0 баллов
+                    </label>
+<label class="option">
+<input name="pressure" type="radio" value="2"/> Да — 2 балла
+                    </label>
+</div>
+</div>
+<div class="question">
+<div class="question-title">7. Были ли у вас когда-либо повышены уровень сахара в крови (например, при медосмотре, болезни, беременности)?</div>
+<div class="options">
+<label class="option">
+<input name="sugar" required="" type="radio" value="0"/> Нет — 0 баллов
+                    </label>
+<label class="option">
+<input name="sugar" type="radio" value="5"/> Да — 5 баллов
+                    </label>
+</div>
+</div>
+<div class="question">
+<div class="question-title">8. Есть ли у кого-то из ваших родственников (родители, братья, сестры) сахарный диабет?</div>
+<div class="options">
+<label class="option">
+<input name="relatives" required="" type="radio" value="0"/> Нет — 0 баллов
+                    </label>
+<label class="option">
+<input name="relatives" type="radio" value="3"/> Да, у родственников 2-й линии (бабушка, дедушка, тетя, дядя) — 3 балла
+                    </label>
+<label class="option">
+<input name="relatives" type="radio" value="5"/> Да, у родственников 1-й линии (мама, папа, брат, сестра) — 5 баллов
+                    </label>
+</div>
+</div>
+<button class="btn" style="width: 100%;" type="submit">Подсчитать результаты</button>
+</form>
+<div class="result-container" id="resultContainer">
+<h2 class="result-title">Ваш результат</h2>
+<div class="score">Сумма баллов: <span id="totalScore">0</span></div>
+<div class="risk-level low" id="riskLevel">Низкий риск</div>
+<div class="recommendation" id="recommendation">
+                Вероятность развития сахарного диабета 2 типа в ближайшие 10 лет низкая. Однако сохраняйте здоровый образ жизни и проходите регулярные обследования.
+            </div>
+<button class="btn" id="restartBtn" style="width: 100%; margin-top: 20px;">Пройти тест заново</button>
+</div>
+</div>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => {
+                option.addEventListener('click', function () {
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                        const groupName = radio.name;
+                        document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
+                            r.closest('.option').classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                    }
+                });
+            });
+
+            const calculateBmiBtn = document.getElementById('calculateBmiBtn');
+            const bmiCalculator = document.getElementById('bmiCalculator');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const bmiResult = document.getElementById('bmiResult');
+
+            calculateBmiBtn.addEventListener('click', function () {
+                bmiCalculator.classList.toggle('show');
+                if (bmiCalculator.classList.contains('show')) {
+                    bmiCalculator.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            calculateBtn.addEventListener('click', function () {
+                const height = parseFloat(document.getElementById('height').value) / 100;
+                const weight = parseFloat(document.getElementById('weight').value);
+                if (height && weight) {
+                    const bmi = (weight / (height * height)).toFixed(1);
+                    let bmiCategory = '';
+                    let bmiPoints = '';
+                    if (bmi < 25) {
+                        bmiCategory = 'Нормальный вес';
+                        bmiPoints = '0 баллов';
+                        document.querySelector('input[name="bmi"][value="0"]').checked = true;
+                        document.querySelector('input[name="bmi"][value="0"]').closest('.option').classList.add('selected');
+                    } else if (bmi >= 25 && bmi <= 30) {
+                        bmiCategory = 'Избыточный вес';
+                        bmiPoints = '1 балл';
+                        document.querySelector('input[name="bmi"][value="1"]').checked = true;
+                        document.querySelector('input[name="bmi"][value="1"]').closest('.option').classList.add('selected');
+                    } else {
+                        bmiCategory = 'Ожирение';
+                        bmiPoints = '3 балла';
+                        document.querySelector('input[name="bmi"][value="3"]').checked = true;
+                        document.querySelector('input[name="bmi"][value="3"]').closest('.option').classList.add('selected');
+                    }
+                    bmiResult.innerHTML = `Ваш ИМТ: <strong>${bmi}</strong> (${bmiCategory}) — ${bmiPoints}`;
+                    bmiResult.classList.add('show');
+                } else {
+                    alert('Пожалуйста, введите корректные значения роста и веса.');
+                }
+            });
+
+            const surveyForm = document.getElementById('surveyForm');
+            const resultContainer = document.getElementById('resultContainer');
+            const totalScoreElement = document.getElementById('totalScore');
+            const riskLevelElement = document.getElementById('riskLevel');
+            const recommendationElement = document.getElementById('recommendation');
+            const restartBtn = document.getElementById('restartBtn');
+
+            surveyForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const groupNames = ["age", "bmi", "waist", "activity", "vegetables", "pressure", "sugar", "relatives"];
+                let isValid = true;
+                for (const name of groupNames) {
+                    const selected = document.querySelector(`input[name="${name}"]:checked`);
+                    if (!selected) {
+                        alert("Пожалуйста, ответьте на все вопросы.");
+                        return;
+                    }
+                }
+
+                const age = parseInt(document.querySelector('input[name="age"]:checked').value);
+                const bmi = parseInt(document.querySelector('input[name="bmi"]:checked').value);
+                const waist = parseInt(document.querySelector('input[name="waist"]:checked').value);
+                const activity = parseInt(document.querySelector('input[name="activity"]:checked').value);
+                const vegetables = parseInt(document.querySelector('input[name="vegetables"]:checked').value);
+                const pressure = parseInt(document.querySelector('input[name="pressure"]:checked').value);
+                const sugar = parseInt(document.querySelector('input[name="sugar"]:checked').value);
+                const relatives = parseInt(document.querySelector('input[name="relatives"]:checked').value);
+
+                const totalScore = age + bmi + waist + activity + vegetables + pressure + sugar + relatives;
+                totalScoreElement.textContent = totalScore;
+
+                let riskLevel = '', recommendation = '', riskClass = '';
+                if (totalScore <= 7) {
+                    riskLevel = 'Низкий риск';
+                    recommendation = 'Поддерживайте здоровый образ жизни и наблюдайтесь у врача.';
+                    riskClass = 'low';
+                } else if (totalScore <= 11) {
+                    riskLevel = 'Умеренный риск';
+                    recommendation = 'Контролируйте глюкозу и обсудите образ жизни с врачом.';
+                    riskClass = 'medium';
+                } else if (totalScore <= 14) {
+                    riskLevel = 'Высокий риск';
+                    recommendation = 'Обратитесь к врачу и сдайте необходимые анализы.';
+                    riskClass = 'high';
+                } else {
+                    riskLevel = 'Очень высокий риск';
+                    recommendation = 'Срочно проконсультируйтесь с врачом. Возможно, потребуется глюкозотолерантный тест и анализ HbA1c.';
+                    riskClass = 'very-high';
+                }
+
+                riskLevelElement.textContent = riskLevel;
+                riskLevelElement.className = 'risk-level ' + riskClass;
+                recommendationElement.textContent = recommendation;
+                resultContainer.style.display = 'block';
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+
+            restartBtn.addEventListener('click', function () {
+                surveyForm.reset();
+                document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                resultContainer.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

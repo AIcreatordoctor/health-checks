@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>MedBaseGeotar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #28a745;
+      --secondary-color: #0066cc;
+      --bg-color: #f7f9fc;
+      --text-color: #333;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: var(--bg-color);
+    }
+    header {
+      background: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .logo {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    .switcher {
+      background-color: #e6f4ea;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .switcher:hover {
+      background-color: #d4f0dc;
+    }
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background-color: #ffffff;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+    .card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: var(--secondary-color);
+    }
+    .card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .card li {
+      margin-bottom: 0.5rem;
+      color: #555;
+      padding-left: 1rem;
+      position: relative;
+    }
+    .card li::before {
+      content: "\2022";
+      position: absolute;
+      left: 0;
+      color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">MedBaseGeotar</div>
+    <button class="switcher" onclick="switchMode()">Режим: Врач</button>
+  </header>
+  <main id="mainContent"></main>
+
+  <script>
+    let mode = 'doctor';
+
+    function switchMode() {
+      mode = (mode === 'doctor') ? 'student' : 'doctor';
+      document.querySelector('.switcher').textContent = 'Режим: ' + (mode === 'doctor' ? 'Врач' : 'Студент');
+      renderContent();
+    }
+
+    function renderContent() {
+      const main = document.getElementById('mainContent');
+      if (mode === 'doctor') {
+        main.innerHTML = `
+          <div class="section-title">Навигация для врача</div>
+          <div class="grid">
+            <div class="card">
+              <h2>Инструменты врача</h2>
+              <ul>
+                <li>Обзорные статьи</li>
+                <li>Лекарственные препараты</li>
+                <li>Взаимодействие ЛС</li>
+                <li>Лабораторная диагностика</li>
+                <li>Словарь</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h2>Регламенты</h2>
+              <ul>
+                <li>Рекомендации</li>
+                <li>Стандарты</li>
+                <li>Порядки</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h2>Библиотека</h2>
+              <ul>
+                <li>Золотая серия</li>
+                <li>Тактика врача</li>
+                <li>Нац. руководства</li>
+                <li>Атласы</li>
+                <li>Военная медицина</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h2>Правовая поддержка</h2>
+              <ul>
+                <li>Медицинская экспертиза</li>
+                <li>Контрольные мероприятия</li>
+                <li>Управление мед. организацией</li>
+              </ul>
+            </div>
+          </div>`;
+      } else {
+        main.innerHTML = `
+          <div class="section-title">Навигация для студента</div>
+          <div class="grid">
+            <div class="card">
+              <h2>Учебные комплекты</h2>
+              <ul>
+                <li>Медицинские науки</li>
+                <li>Гуманитарные науки</li>
+                <li>Аудиокниги</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h2>Электронная библиотека</h2>
+              <ul>
+                <li>Цифровые учебные пособия</li>
+                <li>Периодические издания</li>
+                <li>Учебники вузовских издательств</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h2>ИИ-помощник студента</h2>
+              <ul>
+                <li>Ответы на вопросы по учебе</li>
+                <li>Навигация по материалам</li>
+                <li>Рекомендации по литературе</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h2>Доступ и инструкция</h2>
+              <ul>
+                <li>Получить удалённый доступ</li>
+                <li>Как пользоваться платформой</li>
+              </ul>
+            </div>
+          </div>`;
+      }
+    }
+
+    renderContent();
+  </script>
+</body>
+</html>

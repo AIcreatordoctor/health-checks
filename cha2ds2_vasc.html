@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CHA₂DS₂-VASc Калькулятор</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-sans: 'Inter', sans-serif;
+      --color-primary: #1e88e5;
+      --color-low: #43a047;
+      --color-mid: #fdd835;
+      --color-high: #e53935;
+      --bg-light: #f5f7fa;
+      --bg-dark: #2c2c2e;
+      --card-light: #ffffff;
+      --card-dark: #3a3a3c;
+      --text-light: #f5f5f7;
+      --text-dark: #1c1c1e;
+      --transition: 0.3s ease;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-light);
+      color: var(--text-dark);
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh;
+      transition: background var(--transition), color var(--transition);
+    }
+    .container {
+      width: 100%; max-width: 450px;
+      background: var(--card-light);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.6s ease-out;
+      transition: background var(--transition);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      font-size: 1.8rem; font-weight: 700;
+      text-align: center; margin-bottom: 20px;
+      color: var(--color-primary);
+    }
+    .theme-toggle {
+      position: absolute; top: 20px; right: 20px;
+      cursor: pointer; font-size: 1.2rem;
+      user-select: none;
+      transition: transform var(--transition);
+    }
+    .theme-toggle:hover { transform: rotate(20deg); }
+    form { display: grid; gap: 15px; }
+    .item { display: flex; align-items: center; padding: 10px; border-radius: 8px; transition: background var(--transition); cursor: pointer; }
+    .item:hover { background: rgba(30,136,229,0.05); }
+    .item input { margin-right: 12px; width: 18px; height: 18px; accent-color: var(--color-primary); cursor: pointer; transition: transform var(--transition); }
+    .item input:checked { transform: scale(1.2); }
+    .item label { flex: 1; font-weight: 500; font-size: 1rem; }
+    .tooltip { margin-left: 8px; position: relative; cursor: help; font-size: 1.1rem; color: #888; }
+    .tooltip-text { visibility: hidden; opacity: 0; width: 180px; background: rgba(0,0,0,0.75); color: #fff; text-align: left; border-radius: 6px; padding: 6px; position: absolute; z-index: 1; top: 110%; left: 50%; transform: translateX(-50%); transition: opacity 0.2s; font-size: 0.85rem; }
+    .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+    .result, .risk, .comment { text-align: center; margin: 20px 0; font-weight: 600; }
+    .result { font-size: 1.3rem; }
+    .risk { font-size: 1.3rem; }
+    .comment { font-size: 1rem; font-weight: 500; }
+    .pulse { animation: pulse 0.5s ease-out; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.06); } 100% { transform: scale(1); } }
+    .controls { display: flex; justify-content: space-between; margin-top: 10px; }
+    button { flex: 1; margin: 0 5px; padding: 12px; font-size: 1rem; border: none; border-radius: 8px; cursor: pointer; transition: background var(--transition), transform var(--transition); color: #fff; }
+    #reset { background: #757575; }
+    #print { background: var(--color-primary); }
+    button:hover { transform: translateY(-2px); }
+    body.dark { background: var(--bg-dark); color: var(--text-light); }
+    body.dark .container { background: var(--card-dark); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
+    <h1>CHA₂DS₂-VASc</h1>
+    <form id="calc-form">
+      <div class="item"><input type="checkbox" id="age65" name="age65"><label for="age65">Возраст 65–74 лет (1 балл)</label></div>
+      <div class="item"><input type="checkbox" id="age75" name="age75"><label for="age75">Возраст ≥75 лет (2 балла)</label></div>
+      <div class="item"><input type="checkbox" id="female" name="female"><label for="female">Женский пол (1 балл)</label></div>
+      <div class="item"><input type="checkbox" id="htn" name="htn"><label for="htn">Артериальная гипертензия (1 балл)</label></div>
+      <div class="item"><input type="checkbox" id="hf" name="hf"><label for="hf">Сердечная недостаточность (1 балл)</label></div>
+      <div class="item"><input type="checkbox" id="dm" name="dm"><label for="dm">Сахарный диабет (1 балл)</label></div>
+      <div class="item"><input type="checkbox" id="stroke" name="stroke"><label for="stroke">Инсульт/ТИА/тромбоэмболия (2 балла)</label></div>
+      <div class="item">
+        <input type="checkbox" id="vascular" name="vascular">
+        <label for="vascular">Сосудистые заболевания (1 балл)</label>
+        <div class="tooltip">ℹ<span class="tooltip-text">ИБС, инфаркт миокарда, ПАОД и др.</span></div>
+      </div>
+    </form>
+    <div class="result" id="result">Баллы: 0</div>
+    <div class="risk" id="riskText">Низкий риск</div>
+    <div class="comment" id="comment">Пациент имеет низкий риск инсульта по шкале CHA₂DS₂-VASc. Рекомендовано продолжать стандартное наблюдение.</div>
+    <div class="controls">
+      <button id="reset" onclick="resetForm();return false;">Сбросить</button>
+      <button id="print" onclick="window.print()">Распечатать</button>
+    </div>
+  </div>
+  <script>
+    const form = document.getElementById('calc-form');
+    const resultEl = document.getElementById('result');
+    const riskEl = document.getElementById('riskText');
+    const commentEl = document.getElementById('comment');
+
+    form.addEventListener('change', updateResult);
+    updateResult();
+
+    function updateResult() {
+      let score = 0;
+      if (form.age65.checked) score++;
+      if (form.age75.checked) score += 2;
+      if (form.female.checked) score++;
+      if (form.htn.checked) score++;
+      if (form.hf.checked) score++;
+      if (form.dm.checked) score++;
+      if (form.stroke.checked) score += 2;
+      if (form.vascular.checked) score++;
+
+      resultEl.textContent = `Баллы: ${score}`;
+      resultEl.classList.add('pulse');
+      riskEl.classList.add('pulse');
+      commentEl.classList.add('pulse');
+      setTimeout(()=>{
+        resultEl.classList.remove('pulse');
+        riskEl.classList.remove('pulse');
+        commentEl.classList.remove('pulse');
+      }, 500);
+
+      interpret(score);
+    }
+
+    function interpret(score) {
+      const femaleOnly = (
+        score === 1 && form.female.checked &&
+        ![form.age65,form.age75,form.htn,form.hf,form.dm,form.stroke,form.vascular].some(i=>i.checked)
+      );
+      let text = '', color = '', comment = '';
+      if (score === 0 || femaleOnly) {
+        text = 'Низкий риск';
+        color = '--color-low';
+        comment = 'Пациент имеет низкий риск инсульта по шкале CHA₂DS₂-VASc. Рекомендовано продолжать стандартное наблюдение без назначения антикоагулянтов и контролировать факторы риска.';
+      } else if (score === 1) {
+        text = 'Средний риск';
+        color = '--color-mid';
+        comment = 'Пациент имеет средний риск инсульта (1 балл). Следует рассмотреть возможность назначения антикоагулянтов после оценки противопоказаний и, при необходимости, проконсультироваться с кардиологом.';
+      } else {
+        text = 'Высокий риск';
+        color = '--color-high';
+        comment = 'Пациент имеет высокий риск инсульта (≥2 баллов). Необходимо назначить антикоагулянтную терапию (при отсутствии противопоказаний) и организовать мониторинг свертывающей системы.';
+      }
+      riskEl.textContent = text;
+      riskEl.style.color = `var(${color})`;
+      commentEl.textContent = comment;
+    }
+
+    function resetForm() {
+      form.reset();
+      updateResult();
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
+</body>
+</html>

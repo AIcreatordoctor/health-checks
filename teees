@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Раздача книг врачам — День врача</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #2563eb;
+      --bg: #f6f8fa;
+      --white: #fff;
+      --radius: 1.3rem;
+      --shadow: 0 6px 24px 0 rgba(30,60,140,0.09);
+      --gray: #576071;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--bg);
+      color: #222;
+    }
+    .main-section {
+      min-height: 58vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(120deg,#e7f0ff 60%,#f6f8fa 100%);
+      padding: 2.5rem 0 1rem 0;
+      animation: fadein 1s;
+    }
+    @keyframes fadein {
+      from { opacity:0; transform:translateY(24px);}
+      to   { opacity:1; transform:none;}
+    }
+    .tag {
+      background: var(--accent);
+      color: #fff;
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.38em 1em;
+      font-size: 1.02rem;
+      letter-spacing: 0.02em;
+      margin-bottom: 1em;
+      box-shadow: 0 2px 14px 0 rgba(37,99,235,0.08);
+      animation: fadein 1.3s .2s both;
+    }
+    h1 {
+      font-size: 2.7rem;
+      font-weight: 700;
+      text-align: center;
+      margin: 0 0 0.45em 0;
+      letter-spacing: -1px;
+      line-height: 1.11;
+      color: #1e293b;
+      animation: fadein 1.3s .3s both;
+    }
+    .desc {
+      font-size: 1.3rem;
+      color: var(--gray);
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto 2em auto;
+      animation: fadein 1.3s .4s both;
+    }
+    .action-btn {
+      background: var(--accent);
+      color: #fff;
+      padding: 1em 2.5em;
+      font-size: 1.18rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 999px;
+      box-shadow: 0 4px 20px 0 rgba(37,99,235,0.13);
+      cursor: pointer;
+      margin: 1.5em 0 0 0;
+      transition: background .16s, box-shadow .17s, transform .11s;
+      animation: popin .8s 1s both;
+    }
+    .action-btn:hover {
+      background: #1749ad;
+      box-shadow: 0 8px 26px 0 rgba(37,99,235,0.21);
+      transform: scale(1.04);
+    }
+    @keyframes popin {
+      from { opacity:0; transform:scale(.9);}
+      to { opacity:1; transform:scale(1);}
+    }
+    .content-section {
+      background: var(--white);
+      max-width: 670px;
+      margin: 2.3rem auto 0 auto;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2.2rem 1.6rem 2.1rem 1.6rem;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 2.5rem;
+      animation: fadein 1.3s .1s both;
+    }
+    .section-title {
+      font-size: 1.38rem;
+      font-weight: 600;
+      margin-bottom: .5em;
+      color: var(--accent);
+      letter-spacing: -0.4px;
+    }
+    .grid-books {
+      display: flex;
+      gap: 1.1em;
+      flex-wrap: wrap;
+      margin: 1.3em 0 0.4em 0;
+    }
+    .book-card {
+      background: linear-gradient(120deg,#eaf1ff 70%,#fff 100%);
+      border-radius: .7em;
+      box-shadow: 0 2px 10px 0 rgba(37,99,235,0.07);
+      min-width: 110px;
+      min-height: 92px;
+      padding: 1em .9em .8em .9em;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      font-size: 1.01rem;
+      font-weight: 500;
+      color: #355396;
+      margin-bottom: .6em;
+      transition: box-shadow .18s, transform .13s;
+      cursor: pointer;
+      border:1.2px solid #f1f6fd;
+    }
+    .book-card:hover {
+      box-shadow: 0 6px 24px 0 rgba(37,99,235,0.18);
+      transform: translateY(-3px) scale(1.04);
+      background: #f5f9ff;
+    }
+    .features-list {
+      margin: 1.2em 0 .3em 0;
+      padding: 0;
+      list-style: none;
+      color: #42506b;
+      font-size: 1.08rem;
+    }
+    .features-list li {
+      margin-bottom: .66em;
+      display: flex;
+      align-items: flex-start;
+    }
+    .features-list span {
+      font-size: 1.2em;
+      color: var(--accent);
+      margin-right: .64em;
+      font-weight: bold;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .steps-row {
+      display: flex;
+      gap: 1.2em;
+      margin: 1.3em 0 0 0;
+      flex-wrap: wrap;
+      font-size: 1.03em;
+    }
+    .step {
+      flex: 1;
+      background: #e7f0ff;
+      border-radius: .8em;
+      padding: 1em 1em .9em 1em;
+      color: #355396;
+      font-weight: 600;
+      box-shadow: 0 2px 9px 0 rgba(37,99,235,0.07);
+      min-width: 140px;
+      text-align: center;
+      margin-bottom: .7em;
+    }
+    .faq {
+      margin-top: 2em;
+    }
+    .faq q {
+      display: block;
+      font-weight: 600;
+      color: #1749ad;
+      margin-bottom: 0.45em;
+      font-size: 1.08em;
+    }
+    .faq .faq-item {
+      margin-bottom: 1.15em;
+    }
+    .reg-form {
+      max-width: 420px;
+      margin: 2.5em auto 0 auto;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2em 1.6em 1.6em 1.6em;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+      align-items: center;
+      animation: fadein 1.3s .2s both;
+    }
+    .reg-form input, .reg-form select {
+      width: 98%;
+      padding: 0.85em 1em;
+      font-size: 1.08em;
+      border-radius: 0.7em;
+      border: 1.2px solid #e7e7e7;
+      background: #f8fbfd;
+      outline: none;
+      transition: border .16s;
+      font-family: inherit;
+    }
+    .reg-form input:focus, .reg-form select:focus {
+      border: 1.3px solid var(--accent);
+      background: #fff;
+    }
+    .reg-form button {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      border-radius: .8em;
+      font-size: 1.14em;
+      padding: 1em 0;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 2px 10px 0 rgba(37,99,235,0.09);
+      transition: background .16s;
+      margin-top: .5em;
+    }
+    .reg-form button:hover { background: #1749ad; }
+    .reg-form .thx { display: none; color: var(--accent); font-weight: 700; font-size: 1.14em; margin-top: 1em;}
+    .contacts {
+      margin: 2.5em 0 .8em 0;
+      color: #68748c;
+      font-size: 1.08em;
+      text-align: center;
+      opacity: .94;
+    }
+    .footer {
+      color: #a5adc2;
+      font-size: 1em;
+      padding: 1em 0 2em 0;
+      text-align: center;
+      letter-spacing: .04em;
+    }
+    @media (max-width:600px) {
+      .content-section {padding:1.2em .5em 1.2em .5em;}
+      .main-section {padding:1.1em 0 1em 0;}
+      .reg-form {padding:1.2em .4em;}
+      h1 {font-size:2rem;}
+      .desc {font-size:1.07em;}
+      .steps-row {gap:.6em;}
+    }
+  </style>
+</head>
+<body>
+  <section class="main-section">
+    <span class="tag">Акция ко Дню врача</span>
+    <h1>Раздача книг врачам<br>— с заботой о каждом</h1>
+    <div class="desc">
+      15 июля 2025 <br>
+      Получите электронные и печатные медицинские книги<br>
+      для профессионального развития и вдохновения.
+    </div>
+    <button class="action-btn" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'});">
+      Зарегистрироваться
+    </button>
+  </section>
+
+  <div class="content-section">
+    <div class="section-title">Что получит каждый участник</div>
+    <div class="grid-books">
+      <div class="book-card">🩺 <b>Клинические рекомендации</b><br><span style="font-size:.95em;font-weight:400;">Новейшие справочники</span></div>
+      <div class="book-card">📕 <b>Практическая медицина</b><br><span style="font-size:.95em;font-weight:400;">Топ-издания года</span></div>
+      <div class="book-card">💡 <b>Истории врачей</b><br><span style="font-size:.95em;font-weight:400;">Вдохновение и опыт</span></div>
+      <div class="book-card">📚 <b>Электронные книги</b><br><span style="font-size:.95em;font-weight:400;">Без ограничений</span></div>
+    </div>
+    <ul class="features-list">
+      <li><span>✓</span> Свободный доступ к коллекции профильных изданий</li>
+      <li><span>✓</span> Подарок каждому зарегистрированному врачу</li>
+      <li><span>✓</span> Вдохновляющие и полезные материалы для практики</li>
+      <li><span>✓</span> Легко получить — онлайн, без поездок</li>
+    </ul>
+  </div>
+
+  <div class="content-section">
+    <div class="section-title">Как принять участие?</div>
+    <div class="steps-row">
+      <div class="step">1. Зарегистрируйтесь на сайте</div>
+      <div class="step">2. Дождитесь письма с инструкцией</div>
+      <div class="step">3. Получите книги в электронном/бумажном виде</div>
+    </div>
+  </div>
+
+  <div class="content-section faq">
+    <div class="section-title">Частые вопросы</div>
+    <div class="faq-item">
+      <q>Кто может участвовать?</q>
+      <div>Врачи любых специальностей, зарегистрированные в РФ.</div>
+    </div>
+    <div class="faq-item">
+      <q>Как получить книги?</q>
+      <div>После регистрации вы получите письмо с инструкциями и ссылкой для скачивания/заказа.</div>
+    </div>
+    <div class="faq-item">
+      <q>Книги только электронные?</q>
+      <div>Доступны как электронные, так и часть печатных изданий — условия уточняйте в письме.</div>
+    </div>
+    <div class="faq-item">
+      <q>Сколько это стоит?</q>
+      <div>Участие бесплатно, никаких платежей не требуется.</div>
+    </div>
+  </div>
+
+  <form class="reg-form" id="register">
+    <h2 style="margin:0 0 .5em 0;">Регистрация</h2>
+    <input type="text" name="name" required placeholder="ФИО">
+    <input type="email" name="email" required placeholder="E-mail">
+    <select name="specialty" required>
+      <option value="" disabled selected>Специальность</option>
+      <option>Терапевт</option>
+      <option>Хирург</option>
+      <option>Педиатр</option>
+      <option>Акушер-гинеколог</option>
+      <option>Кардиолог</option>
+      <option>Другое</option>
+    </select>
+    <button type="submit">Отправить заявку</button>
+    <div class="thx" id="thx">Спасибо за регистрацию! Письмо с инструкцией придёт на почту.</div>
+  </form>
+
+  <div class="contacts">
+    <b>Организатор:</b> [Ваша компания]<br>
+    E-mail: info@ваша-компания.ru <br>
+    Телефон: +7 900 000 00 00
+  </div>
+  <div class="footer">
+    &copy; 2025 [Ваша компания] — Забота. Поддержка. Профессионализм.
+  </div>
+  <script>
+    // Анимация и имитация отправки формы
+    const regForm = document.getElementById('register');
+    regForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      regForm.querySelector('button[type=\"submit\"]').style.display = 'none';
+      document.getElementById('thx').style.display = 'block';
+      setTimeout(() => {
+        regForm.reset();
+        regForm.querySelector('button[type=\"submit\"]').style.display = '';
+        document.getElementById('thx').style.display='none';
+      }, 3500);
+    });
+  </script>
+</body>
+</html>
